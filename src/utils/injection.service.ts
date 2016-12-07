@@ -126,32 +126,11 @@ export class InjectionService {
     // project the options passed to the component instance
     this.projectComponentInputs(componentRef, options);
 
-    // ApplicationRef's attachView and detachView methods are in Angular ^2.2.1 but not before.
-    // The `else` clause here can be removed once 2.2.1 is released.
-    if (appRef['attachView']) {
-      appRef.attachView(componentRef.hostView);
+    appRef.attachView(componentRef.hostView);
 
-      componentRef.onDestroy(() => {
-        appRef.detachView(componentRef.hostView);
-      });
-    } else {
-      // When creating a component outside of a ViewContainer, we need to manually register
-      // its ChangeDetector with the application. This API is unfortunately not published
-      // in Angular <= 2.2.0. The change detector must also be deregistered when the component
-      // is destroyed to prevent memory leaks.
-      let changeDetectorRef = componentRef.changeDetectorRef;
-      appRef.registerChangeDetector(changeDetectorRef);
-
-      componentRef.onDestroy(() => {
-        appRef.unregisterChangeDetector(changeDetectorRef);
-
-        // Normally the ViewContainer will remove the component's nodes from the DOM.
-        // Without a ViewContainer, we need to manually remove the nodes.
-        if (componentRootNode.parentNode) {
-          componentRootNode.parentNode.removeChild(componentRootNode);
-        }
-      });
-    }
+    componentRef.onDestroy(() => {
+      appRef.detachView(componentRef.hostView);
+    });
 
     location.appendChild(componentRootNode);
 

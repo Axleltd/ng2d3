@@ -40,16 +40,17 @@ import { AlignmentTypes } from './alignment.type';
       transition('void => *', [
         style({
           opacity: 0,
-          'pointer-events': 'none', // disable pointer events so there is no interference during animation
-          // transform: 'translate3d(0, 0, 0) perspective(10px) rotateX(10deg)'
+          'pointer-events': 'none',
           transform: 'translate3d(0, 0, 0)'
         }),
         animate('0.3s ease-out')
-      ]),
+      ])
+      /*
       transition('* => void', [
         style({ opacity: 1 }),
         animate('0.2s ease-out')
       ])
+      */
     ])
   ]
 })
